@@ -16,10 +16,10 @@ const DATA = [
 ];
 
 export default function App() {
-  return (
+  return (    
     <View style={styles.container}>
       {/* <Ball /> */}
-      <Deck/>
+      <Deck data={ DATA }/>
     </View>
   );
 }
