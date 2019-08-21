@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
-import { Animated, Text, View } from 'react-native';
+import { Animated, PanResponder, Text, View } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 
 class Deck extends Component {
+  constructor(props) {
+    super(props);
+    this.position = new Animated.ValueXY();
+    this.panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => true, // Tell the app that this panResponder will be responsible for handling user's gestures
+      onPanResponderMove: (event, gesture) => {
+        // Update Animateds Position with gestures delta x,y
+        this.position.setValue({ x: gesture.dx, y: gesture.dy });
+      },
+      onPanResponderRelease: () => {} 
+    });        
+  }
+
   renderCard(item) {
     return (
       <Card key={ item.id }
         title={ item.text }        
         image={ { uri: item.uri } }>
-        <Text>
+        <Text style={ { marginBottom: 10 } }>
           TODO: Display description
         </Text>
         <Button 
@@ -29,9 +42,11 @@ class Deck extends Component {
     }
     
     return (
-      <View>
+      <Animated.View 
+        style={ this.position.getLayout() }
+        {...this.panResponder.panHandlers}>
         { cards }
-      </View>
+      </Animated.View>
     );
   }
 }
